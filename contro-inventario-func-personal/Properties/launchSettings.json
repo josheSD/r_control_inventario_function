@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "contro_inventario_func_personal": {
+      "commandName": "Project",
+      "commandLineArgs": "host start --pause-on-error"
+    }
+  }
+}

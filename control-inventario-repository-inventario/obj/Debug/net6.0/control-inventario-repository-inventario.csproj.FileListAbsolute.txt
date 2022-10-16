@@ -1,0 +1,17 @@
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\bin\Debug\net6.0\control-inventario-repository-inventario.deps.json
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\bin\Debug\net6.0\control-inventario-repository-inventario.runtimeconfig.json
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\bin\Debug\net6.0\control-inventario-repository-inventario.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\bin\Debug\net6.0\control-inventario-repository-inventario.pdb
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\bin\Debug\net6.0\control-inventario-support.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\bin\Debug\net6.0\control-inventario-support.pdb
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.csproj.AssemblyReference.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.GeneratedMSBuildEditorConfig.editorconfig
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.AssemblyInfoInputs.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.AssemblyInfo.cs
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.csproj.CoreCompileInputs.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.csproj.CopyComplete
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\refint\control-inventario-repository-inventario.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.pdb
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\control-inventario-repository-inventario.genruntimeconfig.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-inventario\obj\Debug\net6.0\ref\control-inventario-repository-inventario.dll
