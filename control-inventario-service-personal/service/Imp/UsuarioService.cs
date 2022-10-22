@@ -2,6 +2,7 @@
 using control_inventario_repository_personal.Context;
 using control_inventario_repository_personal.Entity;
 using control_inventario_service_personal.ServiceDto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,89 +21,69 @@ namespace control_inventario_service_personal.service.Imp
             this.context = context;
         }
 
-        public async Task<UsuarioDto> Actualizar(UsuarioDto usuario)
+        public async Task Actualizar(UsuarioDto usuario)
         {
-            var usuarioBD = context.Usuario.Where(e => e.UsuId == usuario.UsuId).FirstOrDefault();
+            var usuarioBD = await context.Usuario.Where(e => e.UsuId == usuario.Id).FirstOrDefaultAsync();
 
             if (usuarioBD == null)
             {
                 throw new CustomException("Usuario no encontrado");
             }
 
-            usuarioBD.UsuId = usuario.UsuId ?? 0;
-            usuarioBD.UsuApellidos = usuario.UsuApellidos;
-            usuarioBD.UsuContrasenia = usuario.UsuContrasenia;
-            usuarioBD.UsuImagenUrl = usuario.UsuImagenUrl;
-            usuarioBD.UsuNombre = usuario.UsuNombre;
-            usuarioBD.UsuRolId = usuario.UsuRolId;
+            usuarioBD.UsuId = usuario.Id ?? 0;
+            usuarioBD.UsuNombre = usuario.Nombre;
+            usuarioBD.UsuDireccion = usuario.Direccion;
+            usuarioBD.UsuUsuario = usuario.Usuario;
+            usuarioBD.UsuContrasenia = BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia);
+            usuarioBD.UsuRolId = usuario.IdRol;
 
             context.Usuario.Update(usuarioBD);
             await context.SaveChangesAsync();
-            return usuario;
         }
 
-        public async Task<UsuarioDto> Eliminar(int idUsuario)
+        public async Task Eliminar(int idUsuario)
         {
-            var usuarioBD = context.Usuario.Where(e => e.UsuId == idUsuario).FirstOrDefault();
+            var usuarioBD = await context.Usuario.Where(e => e.UsuId == idUsuario).FirstOrDefaultAsync();
             if (usuarioBD == null)
             {
                 throw new CustomException("Usuario no encontrado");
             }
-
-            var usuario = new UsuarioDto()
-            {
-                UsuId = usuarioBD.UsuId,
-                UsuApellidos = usuarioBD.UsuApellidos,
-                UsuContrasenia = usuarioBD.UsuContrasenia,
-                UsuImagenUrl = usuarioBD.UsuImagenUrl,
-                UsuNombre = usuarioBD.UsuNombre,
-                UsuRolId = usuarioBD.UsuRolId,
-                UsuUsuario = usuarioBD.UsuUsuario,
-                UsuEstado = usuarioBD.UsuEstado == (int)EstadoUsuario.Activo ? true : false
-            };
 
             usuarioBD.UsuEstado = (int)EstadoUsuario.Inactivo;
 
             context.Usuario.Update(usuarioBD);
             await context.SaveChangesAsync();
-
-            return usuario;
         }
 
-        public async Task<UsuarioDto> Guardar(UsuarioDto usuario)
+        public async Task Guardar(UsuarioDto usuario)
         {
             var usuarioNew = new Usuario
             {
-                UsuApellidos = usuario.UsuApellidos,
-                UsuContrasenia = usuario.UsuContrasenia,
-                UsuImagenUrl = usuario.UsuImagenUrl,
-                UsuNombre = usuario.UsuNombre,
-                UsuRolId = usuario.UsuRolId,
-                UsuUsuario = usuario.UsuUsuario,
-                UsuEstado = (int)EstadoUsuario.Activo
+                UsuNombre = usuario.Nombre,
+                UsuDireccion = usuario.Direccion,
+                UsuUsuario = usuario.Usuario,
+                UsuContrasenia = BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia),
+                UsuEstado = (int)EstadoUsuario.Activo,
+                UsuRolId = usuario.IdRol,
             };
             await context.Usuario.AddAsync(usuarioNew);
             await context.SaveChangesAsync();
-
-            usuario.UsuEstado = true;
-            usuario.UsuId = usuarioNew.UsuId;
-
-            return usuario;
         }
 
         public async Task<List<UsuarioDto>> Listar()
         {
             var lista = context.Usuario.Select(e => new UsuarioDto
             {
-                UsuId = e.UsuId,
-                UsuApellidos = e.UsuApellidos,
-                UsuContrasenia = e.UsuContrasenia,
-                UsuImagenUrl = e.UsuImagenUrl,
-                UsuNombre = e.UsuNombre,
-                UsuUsuario = e.UsuUsuario,
-                UsuRolId = e.UsuRolId,
-                UsuRolNombre = e.UsuRol.RolNombre,
-                UsuEstado = e.UsuEstado == (int)EstadoUsuario.Activo ? true : false
+                Id = e.UsuId,
+                Nombre = e.UsuNombre,
+                Direccion = e.UsuDireccion,
+                Usuario = e.UsuUsuario,
+                Contrasenia = e.UsuContrasenia,
+                Rol = new RolDto
+                {
+                    Id = e.UsuRolId,
+                    Nombre = e.UsuRol.RolNombre
+                }
             }).ToList();
             return lista;
         }

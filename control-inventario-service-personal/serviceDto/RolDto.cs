@@ -9,8 +9,8 @@ namespace control_inventario_service_personal.ServiceDto
     public class RolDto
     {
 
-        public int RolId { get; set; }
-        public string RolNombre { get; set; }
+        public int Id { get; set; }
+        public string Nombre { get; set; }
 
     }
 }

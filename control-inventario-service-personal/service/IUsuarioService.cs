@@ -8,9 +8,9 @@ namespace control_inventario_service_personal.service
     {
 
         Task<List<UsuarioDto>> Listar();
-        Task<UsuarioDto> Guardar(UsuarioDto usuario);
-        Task<UsuarioDto> Actualizar(UsuarioDto usuario);
-        Task<UsuarioDto> Eliminar(int idUsuario);
+        Task Guardar(UsuarioDto usuario);
+        Task Actualizar(UsuarioDto usuario);
+        Task Eliminar(int idUsuario);
 
     }
 }

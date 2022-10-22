@@ -61,12 +61,12 @@ namespace contro_inventario_func_personal.Functions
             return await _executorFunctions.ExecuteFunctions(async () =>
             {
                 var filtro = await req.GetBodyAsync<UsuarioDto>();
-                var usuarioBD = await _usuarioService.Guardar(filtro);
+                await _usuarioService.Guardar(filtro);
                 var response = new Response<UsuarioDto>();
                 var mensaje = "Usuario Creado";
                 log.LogInformation("C# HTTP trigger function processed a request.");
 
-                return response.Accepted(usuarioBD, mensaje);
+                return response.Accepted(new UsuarioDto(), mensaje);
             }, log);
         }
 
@@ -82,11 +82,11 @@ namespace contro_inventario_func_personal.Functions
             return await _executorFunctions.ExecuteFunctions(async () =>
             {
                 var filtro = await req.GetBodyAsync<UsuarioDto>();
-                var usuarioBD = await _usuarioService.Actualizar(filtro);
+                await _usuarioService.Actualizar(filtro);
                 var response = new Response<UsuarioDto>();
                 var mensaje = "Usuario Actualizado";
                 log.LogInformation("C# HTTP trigger function processed a request.");
-                return response.Accepted(usuarioBD, mensaje);
+                return response.Accepted(new UsuarioDto(), mensaje);
             }, log);
         }
 
@@ -102,12 +102,12 @@ namespace contro_inventario_func_personal.Functions
             return await _executorFunctions.ExecuteFunctions(async () =>
             {
                 int IdUsuario = Convert.ToInt32(req.Query["IdUsuario"]);
-                var usuarioBD = await _usuarioService.Eliminar(IdUsuario);
+                 await _usuarioService.Eliminar(IdUsuario);
                 var response = new Response<UsuarioDto>();
                 var mensaje = "Usuario Eliminado";
                 log.LogInformation("C# HTTP trigger function processed a request.");
 
-                return response.Accepted(usuarioBD, mensaje);
+                return response.Accepted(new UsuarioDto(), mensaje);
             }, log);
         }
 

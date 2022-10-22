@@ -22,9 +22,9 @@ namespace control_inventario_repository_personal.Entity
         public string UsuNombre { get; set; }
 
         [Required]
-        [Column("usu_apellidos")]
+        [Column("usu__direccion")]
         [StringLength(255)]
-        public string UsuApellidos { get; set; }
+        public string UsuDireccion { get; set; }
 
         [Required]
         [Column("usu__usuario")]
@@ -35,10 +35,6 @@ namespace control_inventario_repository_personal.Entity
         [Column("usu__contrasenia")]
         [StringLength(255)]
         public string UsuContrasenia { get; set; }
-
-        [Column("usu__imagen_url")]
-        [StringLength(255)]
-        public string? UsuImagenUrl { get; set; }
 
         [Column("usu__estado")]
         public int UsuEstado { get; set; }

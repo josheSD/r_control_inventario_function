@@ -12,6 +12,7 @@ namespace control_inventario_service_inventario.Service
         Task<List<ProyectoDto>> Lista();
         Task Guardar(ProyectoDto proyecto);
         Task Actualizar(ProyectoDto proyecto);
+        Task Vigente(ProyectoVigenteDto proyecto);
         Task Eliminar(int idProyecto);
     }
 }

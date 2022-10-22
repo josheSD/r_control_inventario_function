@@ -158,5 +158,54 @@ namespace control_inventario_service_inventario.Service.Imp
                     }).ToListAsync();
             return lista;
         }
+
+        public async Task Vigente(ProyectoVigenteDto proyecto)
+        {
+
+            // Limpiando
+
+            var proyectoAntiguaBD = await context.ProyectoAlmacen
+                    .Where(x => x.ProAlmProId == proyecto.Id && x.ProAlmEstado == (int)EstadoProyectoAlmacen.Activo).ToListAsync();
+
+            for (int i = 0; i < proyectoAntiguaBD.Count(); i++)
+            {
+                proyectoAntiguaBD[i].ProAlmEstado = (int)EstadoProyectoAlmacen.Antigua;
+                context.ProyectoAlmacen.Update(proyectoAntiguaBD[i]);
+                await context.SaveChangesAsync();
+            }
+
+            // Terminado
+
+            var proyectoDB = await context.Proyecto
+                                    .Where(e => e.ProId == proyecto.Id)
+                                    .FirstOrDefaultAsync();
+
+            if (proyectoDB == null)
+            {
+                throw new CustomException("Proyecto no encontrado");
+            }
+
+            proyectoDB.ProEstado = (int)EstadoProyecto.Concluido;
+            proyectoDB.ProFechaActualizacion = DateTime.UtcNow;
+
+            context.Proyecto.Update(proyectoDB);
+            await context.SaveChangesAsync();
+
+            for (int i = 0; i < proyecto.Articulo.Count(); i++)
+            {
+
+                ProyectoAlmacen newProyectoAlmacen = new ProyectoAlmacen();
+                newProyectoAlmacen.ProAlmCantidad = proyecto.Articulo[i].Cantidad;
+                newProyectoAlmacen.ProAlmEstado = (int)EstadoProyectoAlmacen.Activo;
+                newProyectoAlmacen.ProAlmProId = proyectoDB.ProId;
+                newProyectoAlmacen.ProAlmAlmId = proyecto.Articulo[i].IdAlmacen;
+                newProyectoAlmacen.ProAlmArtId = proyecto.Articulo[i].Id;
+
+                await context.ProyectoAlmacen.AddAsync(newProyectoAlmacen);
+                await context.SaveChangesAsync();
+            }
+
+
+        }
     }
 }

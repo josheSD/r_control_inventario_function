@@ -1,0 +1,17 @@
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\bin\Release\net6.0\control-inventario-repository-personal.deps.json
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\bin\Release\net6.0\control-inventario-repository-personal.runtimeconfig.json
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\bin\Release\net6.0\control-inventario-repository-personal.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\bin\Release\net6.0\control-inventario-repository-personal.pdb
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\bin\Release\net6.0\control-inventario-support.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\bin\Release\net6.0\control-inventario-support.pdb
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.csproj.AssemblyReference.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.GeneratedMSBuildEditorConfig.editorconfig
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.AssemblyInfoInputs.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.AssemblyInfo.cs
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.csproj.CoreCompileInputs.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.csproj.CopyComplete
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\refint\control-inventario-repository-personal.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.pdb
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\control-inventario-repository-personal.genruntimeconfig.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-repository-personal\obj\Release\net6.0\ref\control-inventario-repository-personal.dll

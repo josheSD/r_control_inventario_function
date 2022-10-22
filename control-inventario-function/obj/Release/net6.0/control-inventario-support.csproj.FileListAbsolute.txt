@@ -1,0 +1,12 @@
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\bin\Release\net6.0\control-inventario-support.deps.json
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\bin\Release\net6.0\control-inventario-support.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\bin\Release\net6.0\control-inventario-support.pdb
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\control-inventario-support.csproj.AssemblyReference.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\control-inventario-support.GeneratedMSBuildEditorConfig.editorconfig
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\control-inventario-support.AssemblyInfoInputs.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\control-inventario-support.AssemblyInfo.cs
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\control-inventario-support.csproj.CoreCompileInputs.cache
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\control-inventario-support.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\refint\control-inventario-support.dll
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\control-inventario-support.pdb
+C:\Jose\university\ronald\control-inventario-function\control-inventario-function\obj\Release\net6.0\ref\control-inventario-support.dll

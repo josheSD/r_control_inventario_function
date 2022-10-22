@@ -25,12 +25,9 @@ namespace control_inventario_repository_personal.Entity
         [StringLength(255)]
         public string MenNombre { get; set; }
 
-        [Column("men__padre_id")]
-        public int? MenPadreId { get; set; }
-
-        [Column("men__icon_url")]
+        [Column("men__icon")]
         [StringLength(255)]
-        public string MenIconUrl { get; set; }
+        public string MenIcon { get; set; }
 
         [Column("men__link")]
         [StringLength(255)]

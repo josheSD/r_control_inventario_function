@@ -47,9 +47,9 @@ namespace control_inventario_repository_personal.Context
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UsuApellidos)
+                entity.Property(e => e.UsuDireccion)
                     .IsRequired()
-                    .HasColumnName("usu__apellidos")
+                    .HasColumnName("usu__direccion")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
@@ -62,11 +62,6 @@ namespace control_inventario_repository_personal.Context
                 entity.Property(e => e.UsuContrasenia)
                     .IsRequired()
                     .HasColumnName("usu__contrasenia")
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UsuImagenUrl)
-                    .HasColumnName("usu__imagen_url")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
@@ -126,12 +121,8 @@ namespace control_inventario_repository_personal.Context
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.MenPadreId)
-                    .HasColumnName("men__padre_id")
-                    .IsUnicode(false);
-
-                entity.Property(e => e.MenIconUrl)
-                    .HasColumnName("men__icon_url")
+                entity.Property(e => e.MenIcon)
+                    .HasColumnName("men__icon")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 

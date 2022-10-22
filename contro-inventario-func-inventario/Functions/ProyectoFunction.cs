@@ -84,6 +84,24 @@ namespace contro_inventario_func_inventario.Functions
             }, log);
         }
 
+        [FunctionName("ProyectoVigente")]
+        [OpenApiOperation(operationId: "proyectoVigente", tags: new[] { "Proyecto" })]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Response), Description = "")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(Response))]
+        public async Task<ActionResult> proyectoVigente(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "proyecto/vigente")] HttpRequest req, ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+            return await _executorFunctions.ExecuteFunctions(async () =>
+            {
+                var body = await req.GetBodyAsync<ProyectoVigenteDto>();
+                await _proyectoService.Vigente(body);
+                var response = new Response<List<ProyectoDto>>();
+                log.LogInformation("C# HTTP trigger function processed a request.");
+                return response.Ok(new List<ProyectoDto>(), Mensajes.correcto);
+            }, log);
+        }
+
         [FunctionName("ProyectoEliminar")]
         [OpenApiOperation(operationId: "proyectoEliminar", tags: new[] { "Proyecto" })]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Response), Description = "")]

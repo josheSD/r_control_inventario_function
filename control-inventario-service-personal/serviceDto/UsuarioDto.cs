@@ -9,15 +9,14 @@ namespace control_inventario_service_personal.ServiceDto
     public class UsuarioDto
     {
 
-        public int? UsuId { get; set; }
-        public string UsuNombre { get; set; }
-        public string UsuApellidos { get; set; }
-        public string UsuUsuario { get; set; }
-        public string UsuContrasenia { get; set; }
-        public string? UsuImagenUrl { get; set; }
-        public int UsuRolId { get; set; }
-        public string? UsuRolNombre { get; set; }
-        public bool UsuEstado { get; set; }
+        public int? Id { get; set; }
+        public string Nombre { get; set; }
+        public string Direccion { get; set; }
+        public string Usuario { get; set; }
+        public string Contrasenia { get; set; }
+        public RolDto Rol { get; set; }
+
+        public int IdRol { get; set; }
 
     }
 }
