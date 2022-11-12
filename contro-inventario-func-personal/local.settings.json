@@ -1,0 +1,16 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "SqlConnectionString": "Server=tcp:inventariosrv.database.windows.net,1433;Initial Catalog=bd_control_inventario;Persist Security Info=False;User ID=adminsql;Password=J0sheSD+@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+    "JWT_SECRET_KEY": "xecretKeywqefconftwrosecretone",
+    "JWT_AUDIENCE_TOKEN": "https://localhost:7071",
+    "JWT_ISSUER_TOKEN": "https://localhost:7071",
+    "JWT_EXPIRE_MINUTES": "12"
+  },
+  "Host": {
+    "CORS": "*",
+    "LocalHttpPort": 7071
+  }
+}
