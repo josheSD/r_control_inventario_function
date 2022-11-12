@@ -132,6 +132,8 @@ namespace control_inventario_service_inventario.Service.Imp
                         FechaInicio = e.ProFechaInicio,
                         FechaFin = e.ProFechaFin,
                         Estado = e.ProEstado,
+                        FechaCreacion = e.ProFechaCreacion,
+                        FechaActualizacion = e.ProFechaActualizacion,
                         Articulo = e.ProyectoAlmacen
                             .Where(proAlmacen => proAlmacen.ProAlmEstado == (int)EstadoProyectoAlmacen.Activo)
                             .Select(proAlm => new ArticuloDto

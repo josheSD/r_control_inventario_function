@@ -17,6 +17,8 @@ using System.Text;
 using System.Threading.Tasks;
 using control_inventario_function.SoporteUtil;
 using control_inventario_repository_inventario.Entity;
+using System.IO;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace contro_inventario_func_inventario.Functions
 {
@@ -45,6 +47,27 @@ namespace contro_inventario_func_inventario.Functions
                 var response = new Response<List<ArticuloDto>>();
                 log.LogInformation("C# HTTP trigger function processed a request.");
                 return response.Ok(lista, Mensajes.correcto);
+            }, log);
+        }
+
+        [FunctionName("ArticuloImagen")]
+        [OpenApiOperation(operationId: "articuloImagen", tags: new[] { "Articulo" })]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Response), Description = "")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(Response))]
+        [OpenApiRequestBody(contentType: "multipart/form-data", bodyType: typeof(Response), Required = true, Description = "Image data")]
+        public async Task<ActionResult> articuloImagen(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "articulo/imagen")] HttpRequest req, ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            return await _executorFunctions.ExecuteFunctions(async () =>
+            {
+                var fileImagen = req.Form.Files["fileImagen"];
+                var fileNombre = req.Form["fileNombre"].ToString();
+                await _articuloService.GuardarImagen(fileImagen, fileNombre);
+                var response = new Response<string>();
+                log.LogInformation("C# HTTP trigger function processed a request.");
+                return response.Ok("", Mensajes.correcto);
             }, log);
         }
 

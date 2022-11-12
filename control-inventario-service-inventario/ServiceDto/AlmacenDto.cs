@@ -15,6 +15,8 @@ namespace control_inventario_service_inventario.ServiceDto
         public string Nombre { get; set; }
         public string Direccion { get; set; }
         public int Estado { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public DateTime FechaActualizacion { get; set; }
         public List<ArticuloDto> Articulo { get; set; }
     }
 }

@@ -1,10 +1,14 @@
-﻿using control_inventario_function.Soporte;
+﻿using Azure.Storage.Blobs;
+using control_inventario_function.Soporte;
+using control_inventario_function.SoporteUtil;
 using control_inventario_repository_inventario.Context;
 using control_inventario_repository_inventario.Entity;
 using control_inventario_service_inventario.ServiceDto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,6 +71,17 @@ namespace control_inventario_service_inventario.Service.Imp
             await context.SaveChangesAsync();
         }
 
+        public async Task GuardarImagen(IFormFile fileImagen, string fileNombre)
+        {
+            var blobStorageConnectionString = SettingEnvironment.GetBlobStorageConnectionString();
+            var blobStorageContainerName = SettingEnvironment.GetBlobStorageContainerName();
+
+            var container = new BlobContainerClient(blobStorageConnectionString, blobStorageContainerName);
+            var blob = container.GetBlobClient(fileNombre);
+            var stream = fileImagen.OpenReadStream();
+            await blob.UploadAsync(stream);
+        }
+
         public async Task<List<ArticuloDto>> Lista()
         {
             var lista = await context.Articulo
@@ -80,6 +95,8 @@ namespace control_inventario_service_inventario.Service.Imp
                                         Precio = e.ArtPrecio,
                                         Estado = e.ArtEstado,
                                         IdCategoria = e.ArtCatId,
+                                        FechaCreacion = e.ArtFechaCreacion,
+                                        FechaActualizacion = e.ArtFechaActualizacion,
                                         Categoria = new CategoriaDto
                                         {
                                             Id = e.ArtCat.CatId,

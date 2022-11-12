@@ -26,7 +26,6 @@ namespace control_inventario_service_personal.service.Imp
 
         public async Task<LoginDto> Login(RequestLogin login)
         {
-
             var userDB = await context.Usuario
                                     .Where(e => e.UsuUsuario.Equals(login.User))
                                     .FirstOrDefaultAsync();

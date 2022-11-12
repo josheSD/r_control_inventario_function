@@ -120,6 +120,8 @@ namespace control_inventario_service_inventario.Service.Imp
                             Nombre = e.AlmNombre,
                             Direccion = e.AlmDireccion,
                             Estado = e.AlmEstado,
+                            FechaCreacion = e.AlmFechaCreacion,
+                            FechaActualizacion = e.AlmFechaActualizacion,
                             Articulo = e.ArticuloAlmacen
                             .Where(artAlm => artAlm.ArtAlmArtId == artAlm.ArtAlmArt.ArtId
                                           && artAlm.ArtAlmEstado == (int)EstadoArticuloAlmacen.Activo)

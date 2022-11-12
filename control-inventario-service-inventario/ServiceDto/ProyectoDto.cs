@@ -18,8 +18,8 @@ namespace control_inventario_service_inventario.ServiceDto
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public int Estado { get; set; }
-        public DateTime ProFechaCreacion { get; set; }
-        public DateTime ProFechaActualizacion { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public DateTime FechaActualizacion { get; set; }
         public List<ArticuloDto> Articulo { get; set; }
 
     }

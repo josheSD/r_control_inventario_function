@@ -9,6 +9,9 @@ namespace control_inventario_function.SoporteUtil
         private const string SqlJwtAudienceKey = "JWT_AUDIENCE_TOKEN";
         private const string SqlJwtIssuerKey = "JWT_ISSUER_TOKEN";
         private const string SqlJwtExpireKey = "JWT_EXPIRE_MINUTES";
+
+        private const string BlobStorageConnectionString = "BlobStorageConnectionString";
+        private const string BlobStorageContainerName = "BlobStorageContainerName";
         public static string GetSqlConnectionString()
         {
             return GetEnvironmentVariable(SqlConnectionStringKey);
@@ -28,6 +31,14 @@ namespace control_inventario_function.SoporteUtil
         public static string GetJWTExpireKey()
         {
             return GetEnvironmentVariable(SqlJwtExpireKey);
+        }
+        public static string GetBlobStorageConnectionString()
+        {
+            return GetEnvironmentVariable(BlobStorageConnectionString);
+        }
+        public static string GetBlobStorageContainerName()
+        {
+            return GetEnvironmentVariable(BlobStorageContainerName);
         }
 
         private static string GetEnvironmentVariable(string name)
