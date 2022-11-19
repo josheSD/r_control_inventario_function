@@ -25,12 +25,22 @@ namespace control_inventario_service_inventario.Service.Imp
             // Limpiando
 
             var almacenAntiguaBD = await context.ArticuloAlmacen
-                    .Where(x => x.ArtAlmAlmId == almacen.Id && x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Activo).ToListAsync();
+                    .Where(x => x.ArtAlmAlmId == almacen.Id && x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Anterior).ToListAsync();
 
             for (int i = 0; i < almacenAntiguaBD.Count(); i++)
             {
                 almacenAntiguaBD[i].ArtAlmEstado = (int)EstadoArticuloAlmacen.Antigua;
                 context.ArticuloAlmacen.Update(almacenAntiguaBD[i]);
+                await context.SaveChangesAsync();
+            }
+
+            var almacenAntiguaBD2 = await context.ArticuloAlmacen
+                    .Where(x => x.ArtAlmAlmId == almacen.Id && x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Activo).ToListAsync();
+
+            for (int i = 0; i < almacenAntiguaBD2.Count(); i++)
+            {
+                almacenAntiguaBD2[i].ArtAlmEstado = (int)EstadoArticuloAlmacen.Anterior;
+                context.ArticuloAlmacen.Update(almacenAntiguaBD2[i]);
                 await context.SaveChangesAsync();
             }
 
@@ -99,10 +109,14 @@ namespace control_inventario_service_inventario.Service.Imp
             {
                 ArticuloAlmacen newArticuloAlmacen = new ArticuloAlmacen();
                 newArticuloAlmacen.ArtAlmCantidad = almacen.Articulo[i].Cantidad;
-                newArticuloAlmacen.ArtAlmEstado = (int)EstadoArticuloAlmacen.Activo;
+                newArticuloAlmacen.ArtAlmEstado = (int)EstadoArticuloAlmacen.Anterior;
                 newArticuloAlmacen.ArtAlmArtId = almacen.Articulo[i].Id;
                 newArticuloAlmacen.ArtAlmAlmId = newAlmacen.AlmId;
 
+                await context.ArticuloAlmacen.AddAsync(newArticuloAlmacen);
+                await context.SaveChangesAsync();
+
+                newArticuloAlmacen.ArtAlmEstado = (int)EstadoArticuloAlmacen.Activo;
                 await context.ArticuloAlmacen.AddAsync(newArticuloAlmacen);
                 await context.SaveChangesAsync();
             }

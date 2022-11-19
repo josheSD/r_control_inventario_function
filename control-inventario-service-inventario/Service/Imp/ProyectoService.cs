@@ -2,6 +2,7 @@
 using control_inventario_repository_inventario.Context;
 using control_inventario_repository_inventario.Entity;
 using control_inventario_service_inventario.ServiceDto;
+using Microsoft.Azure.Documents;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -137,26 +138,26 @@ namespace control_inventario_service_inventario.Service.Imp
                         Articulo = e.ProyectoAlmacen
                             .Where(proAlmacen => proAlmacen.ProAlmEstado == (int)EstadoProyectoAlmacen.Activo)
                             .Select(proAlm => new ArticuloDto
+                            {
+                                Id = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtId,
+                                Nombre = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtNombre,
+                                Url = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtUrl,
+                                Precio = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtPrecio,
+                                Estado = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtEstado,
+                                Cantidad = proAlm.ProAlmCantidad,
+                                Categoria = new CategoriaDto
                                 {
-                                    Id = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtId,
-                                    Nombre = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtNombre,
-                                    Url = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtUrl,
-                                    Precio = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtPrecio,
-                                    Estado = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtEstado,
-                                    Cantidad = proAlm.ProAlmCantidad,
-                                    Categoria = new CategoriaDto
-                                    {
-                                        Id = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtCat.CatId,
-                                        Nombre = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtCat.CatNombre
-                                    },
-                                    Almacen = new AlmacenDto
-                                    {
-                                        Id = proAlm.ProAlmAlm.AlmId,
-                                        Nombre = proAlm.ProAlmAlm.AlmNombre,
-                                        Direccion = proAlm.ProAlmAlm.AlmDireccion,
-                                        Articulo = new List<ArticuloDto>()
-                                    }
-                                }).ToList()
+                                    Id = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtCat.CatId,
+                                    Nombre = context.Articulo.Where(art => proAlm.ProAlmArtId == art.ArtId).FirstOrDefault().ArtCat.CatNombre
+                                },
+                                Almacen = new AlmacenDto
+                                {
+                                    Id = proAlm.ProAlmAlm.AlmId,
+                                    Nombre = proAlm.ProAlmAlm.AlmNombre,
+                                    Direccion = proAlm.ProAlmAlm.AlmDireccion,
+                                    Articulo = new List<ArticuloDto>()
+                                }
+                            }).ToList()
                     }).ToListAsync();
             return lista;
         }
@@ -209,5 +210,144 @@ namespace control_inventario_service_inventario.Service.Imp
 
 
         }
+
+        public async Task<List<PrecisionInventarioDto>> PrecisionInventario()
+        {
+            IQueryable<Almacen> listaData = context.Almacen
+                                .Include(x => x.ArticuloAlmacen)
+                                .Include(x => x.ProyectoAlmacen)
+                        .Where(x => x.AlmEstado == (int)EstadoAlmacen.Activo).AsQueryable();
+
+            var listaFinal = new List<PrecisionInventarioDto>();
+
+            for (var i = 0; i < listaData.Count(); i++)
+            {
+                listaFinal.Add(new PrecisionInventarioDto
+                {
+                    IdAlmacen = listaData.ToList()[i].AlmId,
+                    Almacen = listaData.ToList()[i].AlmNombre,
+                    Articulos = this.getArticulosPrecision(listaData, i)
+                }); ;
+            }
+
+            return listaFinal;
+        }
+
+        private List<PrecInvArticuloDTo> getArticulosPrecision(IQueryable<Almacen> lista, int index)
+        {
+            var listaNueva = new List<PrecInvArticuloDTo>();
+
+            var listaArticulo = lista.ToList()[index].ArticuloAlmacen.Where(x => x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Activo);
+            var listaArticuloAnterior = lista.ToList()[index].ArticuloAlmacen.Where(x => x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Anterior);
+
+            for (var i = 0; i < listaArticulo.Count(); i++)
+            {
+                listaNueva.Add(new PrecInvArticuloDTo
+                {
+                    IdArticulo = listaArticulo.ToList()[i].ArtAlmArtId,
+                    NombreArticulo = context.Articulo.Where(x => x.ArtId == listaArticulo.ToList()[i].ArtAlmArtId).FirstOrDefault().ArtNombre,
+                    TotalAnterior = listaArticuloAnterior.ToList()[i].ArtAlmCantidad,
+                    TotalActual = listaArticulo.ToList()[i].ArtAlmCantidad,
+                    Precision = this.getPrecision(listaArticuloAnterior.ToList()[i].ArtAlmCantidad, listaArticulo.ToList()[i].ArtAlmCantidad)
+                }
+                );
+            }
+
+
+            return listaNueva;
+        }
+
+        private string getPrecision(int cantidadAnterior, int cantidadActual)
+        {
+            double calc = ((double)cantidadAnterior / (double)cantidadActual) * 100;
+            string tpi = String.Format("{0:.##}", calc);
+            return tpi;
+        }
+
+        public async Task<List<RotacionInventarioDto>> RotacionInventario()
+        {
+            IQueryable<Almacen> listaData = context.Almacen
+                                .Include(x => x.ArticuloAlmacen)
+                                .Include(x => x.ProyectoAlmacen)
+                                    .ThenInclude(x => x.ProAlmPro)
+                        .Where(x => x.AlmEstado == (int)EstadoAlmacen.Activo).AsQueryable();
+
+            var listaFinal = new List<RotacionInventarioDto>();
+
+            for (var i = 0; i < listaData.Count(); i++)
+            {
+                listaFinal.Add(new RotacionInventarioDto
+                {
+                    IdAlmacen = listaData.ToList()[i].AlmId,
+                    Almacen = listaData.ToList()[i].AlmNombre,
+                    Articulos = this.getArticulosRotacion(listaData, i)
+                });
+            }
+
+            return listaFinal;
+        }
+        private List<RotInvArticuloDTo> getArticulosRotacion(IQueryable<Almacen> lista, int index)
+        {
+            var listaNueva = new List<RotInvArticuloDTo>();
+
+            var listaArticulo = lista.ToList()[index].ArticuloAlmacen.Where(x => x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Activo);
+            var listaProyecto = lista.ToList()[index].ProyectoAlmacen.Where(x => x.ProAlmEstado == (int)EstadoProyectoAlmacen.Activo);
+
+            for (var i = 0; i < listaArticulo.Count(); i++)
+            {
+                listaNueva.Add(new RotInvArticuloDTo
+                {
+                    IdArticulo = listaArticulo.ToList()[i].ArtAlmArtId,
+                    NombreArticulo = context.Articulo.Where(x => x.ArtId == listaArticulo.ToList()[i].ArtAlmArtId).FirstOrDefault().ArtNombre,
+                    UnidadStock = listaArticulo.ToList()[i].ArtAlmCantidad,
+                    UnidadSalida = this.getUnidadSalida(listaArticulo, listaProyecto, i),
+                    Rotacion = this.getRotacion(listaArticulo.ToList()[i].ArtAlmCantidad, this.getUnidadSalida(listaArticulo, listaProyecto, i))
+                }
+                );
+            }
+
+            return listaNueva;
+
+        }
+
+        private int getUnidadSalida(IEnumerable<ArticuloAlmacen> articuloAlmacenes, IEnumerable<ProyectoAlmacen> proyectoAlmacenes, int index)
+        {
+            var unidadSalida = 0;
+            var articuloAlmacen = articuloAlmacenes.ToList()[index];
+            var salida = this.getSalidaByProyecto(proyectoAlmacenes, articuloAlmacen);
+            var conteoProyectoAlmacenes = proyectoAlmacenes.Count();
+
+            if (conteoProyectoAlmacenes > 0 && salida > 0)
+            {
+                unidadSalida = salida;
+            }
+            else
+            {
+                unidadSalida = salida == 0 ? articuloAlmacen.ArtAlmCantidad : salida;
+            }
+            return unidadSalida;
+        }
+
+        private int getSalidaByProyecto(IEnumerable<ProyectoAlmacen> proyectoAlmacenes, ArticuloAlmacen articuloAlmacen)
+        {
+            var salida = 0;
+            var lista = proyectoAlmacenes.Where(x => x.ProAlmEstado == (int)EstadoProyectoAlmacen.Activo &&
+                                                x.ProAlmArtId == articuloAlmacen.ArtAlmArtId &&
+                                                x.ProAlmAlmId == articuloAlmacen.ArtAlmAlmId &&
+                                                x.ProAlmPro.ProEstado == (int)EstadoProyecto.Vigente);
+            for (var i = 0; i < lista.Count(); i++)
+            {
+                salida += lista.ToList()[i].ProAlmCantidad;
+            }
+            return salida;
+        }
+
+        private string getRotacion(int unidadStock, int unidadSalida)
+        {
+            double calc = ((double)unidadSalida / (double)unidadStock);
+            string tpi = String.Format("{0:0.##}", calc);
+            return tpi;
+        }
+
     }
 }

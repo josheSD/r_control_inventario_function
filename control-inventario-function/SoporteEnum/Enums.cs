@@ -49,6 +49,8 @@ namespace control_inventario_function.SoporteEnum
             Activo = 1,
             [Description("Antigua")]
             Antigua = 2,
+            [Description("Anterior")]
+            Anterior = 3,
         }
 
         public enum EstadoProyectoAlmacen

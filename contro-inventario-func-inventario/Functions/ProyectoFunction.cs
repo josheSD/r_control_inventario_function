@@ -120,6 +120,39 @@ namespace contro_inventario_func_inventario.Functions
             }, log);
         }
 
+        [FunctionName("PrecisionInventario")]
+        [OpenApiOperation(operationId: "precisionInventario", tags: new[] { "Proyecto" })]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Response), Description = "")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(Response))]
+        public async Task<ActionResult> precisionInventario(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "proyecto/precisioninventario")] HttpRequest req, ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+            return await _executorFunctions.ExecuteFunctions(async () =>
+            {
+                var lista = await _proyectoService.PrecisionInventario();
+                var response = new Response<List<PrecisionInventarioDto>>();
+                log.LogInformation("C# HTTP trigger function processed a request.");
+                return response.Ok(lista, Mensajes.correcto);
+            }, log);
+        }
+
+        [FunctionName("RotacionInventario")]
+        [OpenApiOperation(operationId: "rotacionInventario", tags: new[] { "Proyecto" })]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Response), Description = "")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(Response))]
+        public async Task<ActionResult> rotacionInventario(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "proyecto/rotacioninventario")] HttpRequest req, ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+            return await _executorFunctions.ExecuteFunctions(async () =>
+            {
+                var lista = await _proyectoService.RotacionInventario();
+                var response = new Response<List<RotacionInventarioDto>>();
+                log.LogInformation("C# HTTP trigger function processed a request.");
+                return response.Ok(lista, Mensajes.correcto);
+            }, log);
+        }
 
     }
 }

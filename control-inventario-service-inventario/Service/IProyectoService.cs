@@ -14,5 +14,7 @@ namespace control_inventario_service_inventario.Service
         Task Actualizar(ProyectoDto proyecto);
         Task Vigente(ProyectoVigenteDto proyecto);
         Task Eliminar(int idProyecto);
+        Task<List<PrecisionInventarioDto>> PrecisionInventario();
+        Task<List<RotacionInventarioDto>> RotacionInventario();
     }
 }
