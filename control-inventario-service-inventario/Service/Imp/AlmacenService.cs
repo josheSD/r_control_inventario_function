@@ -22,29 +22,8 @@ namespace control_inventario_service_inventario.Service.Imp
 
         public async Task Actualizar(AlmacenDto almacen)
         {
-            // Limpiando
 
-            var almacenAntiguaBD = await context.ArticuloAlmacen
-                    .Where(x => x.ArtAlmAlmId == almacen.Id && x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Anterior).ToListAsync();
-
-            for (int i = 0; i < almacenAntiguaBD.Count(); i++)
-            {
-                almacenAntiguaBD[i].ArtAlmEstado = (int)EstadoArticuloAlmacen.Antigua;
-                context.ArticuloAlmacen.Update(almacenAntiguaBD[i]);
-                await context.SaveChangesAsync();
-            }
-
-            var almacenAntiguaBD2 = await context.ArticuloAlmacen
-                    .Where(x => x.ArtAlmAlmId == almacen.Id && x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Activo).ToListAsync();
-
-            for (int i = 0; i < almacenAntiguaBD2.Count(); i++)
-            {
-                almacenAntiguaBD2[i].ArtAlmEstado = (int)EstadoArticuloAlmacen.Anterior;
-                context.ArticuloAlmacen.Update(almacenAntiguaBD2[i]);
-                await context.SaveChangesAsync();
-            }
-
-            // Terminado
+            bool noSonIguales = false;
 
             var almacenBD = await context.Almacen
                                         .Where(e => e.AlmId == almacen.Id)
@@ -55,6 +34,39 @@ namespace control_inventario_service_inventario.Service.Imp
                 throw new CustomException("Almacen no encontrado");
             }
 
+            // Limpiando
+
+            var almacenAntiguaBD = await context.ArticuloAlmacen
+                    .Where(x => x.ArtAlmAlmId == almacen.Id && x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Anterior).ToListAsync();
+
+            if (almacenAntiguaBD.Count() == almacen.Articulo.Count())
+            {
+
+                for (int i = 0; i < almacenAntiguaBD.Count(); i++)
+                {
+                    almacenAntiguaBD[i].ArtAlmEstado = (int)EstadoArticuloAlmacen.Antigua;
+                    context.ArticuloAlmacen.Update(almacenAntiguaBD[i]);
+                    await context.SaveChangesAsync();
+                }
+
+                var almacenAntiguaBD2 = await context.ArticuloAlmacen
+                        .Where(x => x.ArtAlmAlmId == almacen.Id && x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Activo).ToListAsync();
+
+                for (int i = 0; i < almacenAntiguaBD2.Count(); i++)
+                {
+                    almacenAntiguaBD2[i].ArtAlmEstado = (int)EstadoArticuloAlmacen.Anterior;
+                    context.ArticuloAlmacen.Update(almacenAntiguaBD2[i]);
+                    await context.SaveChangesAsync();
+                }
+
+            }
+            else
+            {
+                noSonIguales = true;
+            }
+
+            // Terminado
+
             almacenBD.AlmNombre = almacen.Nombre;
             almacenBD.AlmDireccion = almacen.Direccion;
             almacenBD.AlmFechaActualizacion = DateTime.UtcNow;
@@ -62,17 +74,63 @@ namespace control_inventario_service_inventario.Service.Imp
             context.Almacen.Update(almacenBD);
             await context.SaveChangesAsync();
 
-            for (int i = 0; i < almacen.Articulo.Count(); i++)
-            {
-                ArticuloAlmacen newArticuloAlmacen = new ArticuloAlmacen();
-                newArticuloAlmacen.ArtAlmCantidad = almacen.Articulo[i].Cantidad;
-                newArticuloAlmacen.ArtAlmEstado = (int)EstadoArticuloAlmacen.Activo;
-                newArticuloAlmacen.ArtAlmArtId = almacen.Articulo[i].Id;
-                newArticuloAlmacen.ArtAlmAlmId = almacenBD.AlmId;
 
-                await context.ArticuloAlmacen.AddAsync(newArticuloAlmacen);
-                await context.SaveChangesAsync();
+            // Validando
+            if (noSonIguales)
+            {
+
+                var almacenAntiguaBD2 = await context.ArticuloAlmacen
+                        .Where(x => x.ArtAlmAlmId == almacen.Id && (x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Anterior ||
+                                                                    x.ArtAlmEstado == (int)EstadoArticuloAlmacen.Activo)).ToListAsync();
+
+                for (int j = 0; j < almacenAntiguaBD2.Count(); j++)
+                {
+                    almacenAntiguaBD2[j].ArtAlmEstado = (int)EstadoArticuloAlmacen.Antigua;
+                    context.ArticuloAlmacen.Update(almacenAntiguaBD2[j]);
+                    await context.SaveChangesAsync();
+                }
+
+
+                for (int i = 0; i < almacen.Articulo.Count(); i++)
+                {
+
+                    ArticuloAlmacen newArticuloAlmacen = new ArticuloAlmacen();
+                    newArticuloAlmacen.ArtAlmCantidad = almacen.Articulo[i].Cantidad;
+                    newArticuloAlmacen.ArtAlmEstado = (int)EstadoArticuloAlmacen.Anterior;
+                    newArticuloAlmacen.ArtAlmArtId = almacen.Articulo[i].Id;
+                    newArticuloAlmacen.ArtAlmAlmId = almacenBD.AlmId;
+
+                    await context.ArticuloAlmacen.AddAsync(newArticuloAlmacen);
+                    await context.SaveChangesAsync();
+
+                    ArticuloAlmacen newArticuloAlmacenCopied = new ArticuloAlmacen();
+                    newArticuloAlmacenCopied.ArtAlmCantidad = almacen.Articulo[i].Cantidad;
+                    newArticuloAlmacenCopied.ArtAlmEstado = (int)EstadoArticuloAlmacen.Activo;
+                    newArticuloAlmacenCopied.ArtAlmArtId = almacen.Articulo[i].Id;
+                    newArticuloAlmacenCopied.ArtAlmAlmId = almacenBD.AlmId;
+
+                    await context.ArticuloAlmacen.AddAsync(newArticuloAlmacenCopied);
+                    await context.SaveChangesAsync();
+
+                }
+
             }
+            else
+            {
+                for (int i = 0; i < almacen.Articulo.Count(); i++)
+                {
+                    ArticuloAlmacen newArticuloAlmacen = new ArticuloAlmacen();
+                    newArticuloAlmacen.ArtAlmCantidad = almacen.Articulo[i].Cantidad;
+                    newArticuloAlmacen.ArtAlmEstado = (int)EstadoArticuloAlmacen.Activo;
+                    newArticuloAlmacen.ArtAlmArtId = almacen.Articulo[i].Id;
+                    newArticuloAlmacen.ArtAlmAlmId = almacenBD.AlmId;
+
+                    await context.ArticuloAlmacen.AddAsync(newArticuloAlmacen);
+                    await context.SaveChangesAsync();
+                }
+
+            }
+
 
         }
 

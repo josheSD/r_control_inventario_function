@@ -345,7 +345,7 @@ namespace control_inventario_service_inventario.Service.Imp
         private string getRotacion(int unidadStock, int unidadSalida)
         {
             double calc = ((double)unidadSalida / (double)unidadStock);
-            string tpi = String.Format("{0:0.##}", calc);
+            string tpi = String.Format("{0:0.##}", calc * 100);
             return tpi;
         }
 
