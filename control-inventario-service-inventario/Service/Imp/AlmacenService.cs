@@ -174,8 +174,13 @@ namespace control_inventario_service_inventario.Service.Imp
                 await context.ArticuloAlmacen.AddAsync(newArticuloAlmacen);
                 await context.SaveChangesAsync();
 
-                newArticuloAlmacen.ArtAlmEstado = (int)EstadoArticuloAlmacen.Activo;
-                await context.ArticuloAlmacen.AddAsync(newArticuloAlmacen);
+
+                ArticuloAlmacen newArticuloAlmacen2 = new ArticuloAlmacen();
+                newArticuloAlmacen2.ArtAlmCantidad = almacen.Articulo[i].Cantidad;
+                newArticuloAlmacen2.ArtAlmArtId = almacen.Articulo[i].Id;
+                newArticuloAlmacen2.ArtAlmAlmId = newAlmacen.AlmId;
+                newArticuloAlmacen2.ArtAlmEstado = (int)EstadoArticuloAlmacen.Activo;
+                await context.ArticuloAlmacen.AddAsync(newArticuloAlmacen2);
                 await context.SaveChangesAsync();
             }
 
